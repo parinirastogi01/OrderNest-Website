@@ -108,6 +108,44 @@
     font-weight:500;
   }
 
+  /* ===== Use cases ===== */
+  .usecases{
+    max-width:1040px;
+    margin:8px auto 0;
+    padding:0 24px;
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:16px;
+  }
+  .usecase{
+    background:var(--card);
+    border:2px solid var(--ink);
+    border-radius:16px;
+    padding:16px;
+    text-align:left;
+    box-shadow:4px 4px 0 var(--shadow-col);
+  }
+  .usecase .emoji{
+    width:38px;height:38px;
+    border-radius:10px;
+    display:flex;align-items:center;justify-content:center;
+    font-size:18px;
+    margin-bottom:10px;
+  }
+  .usecase:nth-child(1) .emoji{background:#FFEDED;}
+  .usecase:nth-child(2) .emoji{background:#E9FBF8;}
+  .usecase:nth-child(3) .emoji{background:#FFF6DB;}
+  .usecase:nth-child(4) .emoji{background:#F1EEFF;}
+  .usecase h3{margin:0 0 4px;font-size:14.5px;font-weight:800;}
+  .usecase p{margin:0;font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.45;}
+
+  @media(max-width:760px){
+    .usecases{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:480px){
+    .usecases{grid-template-columns:1fr;}
+  }
+
   /* ===== Stats ===== */
   .stats{
     display:flex;
@@ -205,6 +243,116 @@
     flex-wrap:wrap;
   }
   .toggle-row label{display:flex;align-items:center;gap:6px;cursor:pointer;}
+
+  /* ===== App shell / sidebar ===== */
+  .app-shell{
+    display:flex;
+    align-items:flex-start;
+    max-width:1280px;
+    margin:0 auto;
+  }
+  .sidebar{
+    width:220px;
+    flex-shrink:0;
+    position:sticky;
+    top:0;
+    height:100vh;
+    background:var(--card);
+    border-right:2px solid var(--ink);
+    padding:22px 16px;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    overflow-y:auto;
+    z-index:40;
+  }
+  .sidebar-logo{
+    font-size:19px;
+    font-weight:800;
+    margin-bottom:18px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .sidebar-logo .dotlogo{width:12px;height:12px;border-radius:50%;background:var(--coral);display:inline-block;}
+  .sidebar-section-label{
+    font-size:11px;
+    font-weight:800;
+    text-transform:uppercase;
+    letter-spacing:.05em;
+    color:var(--muted);
+    margin:16px 4px 6px;
+  }
+  .nav-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:100%;
+    text-align:left;
+    background:none;
+    border:2px solid transparent;
+    border-radius:12px;
+    padding:10px 12px;
+    font-size:13.5px;
+    font-weight:700;
+    color:var(--ink);
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .nav-item:hover{background:var(--paper);}
+  .nav-item.active, .nav-item.cat-active{
+    background:var(--paper);
+    border-color:var(--ink);
+    box-shadow:2px 2px 0 var(--grape);
+  }
+  .nav-item .count{
+    margin-left:auto;
+    font-size:11px;
+    font-weight:800;
+    background:var(--line);
+    color:var(--ink);
+    padding:2px 7px;
+    border-radius:999px;
+  }
+  .sidebar-bottom{
+    margin-top:auto;
+    display:flex;
+    flex-direction:column;
+    gap:6px;
+    padding-top:14px;
+    border-top:2px dashed var(--line);
+  }
+  .hamburger{
+    display:none;
+    position:sticky;
+    top:14px;
+    left:16px;
+    margin:14px 0 0 16px;
+    background:var(--card);
+    border:2px solid var(--ink);
+    border-radius:12px;
+    width:42px;height:42px;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:3px 3px 0 var(--shadow-col);
+    z-index:41;
+  }
+  .main-content{
+    flex:1;
+    min-width:0;
+  }
+
+  @media(max-width:860px){
+    .sidebar{
+      position:fixed;
+      left:0;top:0;bottom:0;
+      transform:translateX(-100%);
+      transition:transform .2s ease;
+      box-shadow:6px 0 18px rgba(0,0,0,0.15);
+    }
+    .sidebar.open{transform:translateX(0);}
+    .hamburger{display:flex;align-items:center;justify-content:center;}
+  }
 
   /* ===== Grid ===== */
   #grid{
@@ -448,16 +596,60 @@
 </head>
 <body>
 
-<div class="topbar">
-  <button class="icon-btn" id="themeToggle" title="Toggle dark mode">🌙</button>
-  <button class="icon-btn" id="settingsBtn" title="Connected accounts">⚙️</button>
-</div>
+<div class="app-shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo"><span class="dotlogo"></span> OrderNest</div>
 
-<header>
-  <div class="postmark"><span class="dot"></span>My Inbox, Organized</div>
-  <h1>Order<span>Nest</span></h1>
-  <p>Keep every purchase, warranty date, and return deadline in one colourful spot — with a quick link back to the Gmail receipt.</p>
-</header>
+    <button class="nav-item active" data-nav="all">🏠 All Orders</button>
+    <button class="nav-item" data-nav="ending">⏰ Ending Soon</button>
+    <button class="nav-item" data-nav="archived">🗄️ Archived</button>
+
+    <div class="sidebar-section-label">Categories</div>
+    <button class="nav-item cat-active" data-cat="all">✨ All Categories</button>
+    <button class="nav-item" data-cat="Electronics">💻 Electronics</button>
+    <button class="nav-item" data-cat="Clothing">👕 Clothing</button>
+    <button class="nav-item" data-cat="Home">🏡 Home</button>
+    <button class="nav-item" data-cat="Beauty">💄 Beauty</button>
+    <button class="nav-item" data-cat="Groceries">🛒 Groceries</button>
+    <button class="nav-item" data-cat="Other">📦 Other</button>
+
+    <div class="sidebar-bottom">
+      <button class="nav-item" id="settingsBtn">⚙️ Connected accounts</button>
+      <button class="nav-item" id="themeToggle">🌙 Dark mode</button>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <button class="hamburger" id="hamburgerBtn">☰</button>
+
+    <header>
+      <div class="postmark"><span class="dot"></span>My Inbox, Organized</div>
+      <h1>Order<span>Nest</span></h1>
+      <p>Keep every purchase, warranty date, and return deadline in one colourful spot — with a quick link back to the Gmail receipt.</p>
+    </header>
+
+<div class="usecases">
+  <div class="usecase">
+    <div class="emoji">🛡️</div>
+    <h3>Never miss a warranty claim</h3>
+    <p>See exactly when each product's warranty expires so you can raise a claim before it's too late.</p>
+  </div>
+  <div class="usecase">
+    <div class="emoji">↩️</div>
+    <h3>Return before the deadline</h3>
+    <p>Color-coded alerts flag items whose return window is closing soon, before you lose the chance.</p>
+  </div>
+  <div class="usecase">
+    <div class="emoji">✉️</div>
+    <h3>Skip the inbox hunt</h3>
+    <p>Save a direct link to the Gmail receipt for each order instead of digging through your inbox later.</p>
+  </div>
+  <div class="usecase">
+    <div class="emoji">📊</div>
+    <h3>See spending at a glance</h3>
+    <p>Organize orders by category and export everything to CSV for budgeting or expense tracking.</p>
+  </div>
+</div>
 
 <div class="stats" id="stats"></div>
 
@@ -496,6 +688,8 @@
 <div id="syncNote" class="sync-note"></div>
 
 <div id="grid"></div>
+  </div>
+</div>
 
 <!-- Add/Edit order modal -->
 <div class="overlay" id="overlay">
@@ -605,6 +799,15 @@ let orders = [];
 let editingId = null;
 let gmailConnected = false;
 let lastSynced = null;
+let sidebarView = 'all'; // 'all' | 'ending' | 'archived'
+
+function isEndingSoon(o){
+  const rd = daysUntil(o.returnDate);
+  const wd = daysUntil(o.warrantyDate);
+  const relevant = [rd, wd].filter(d => d !== null);
+  if(relevant.length === 0) return false;
+  return Math.min(...relevant) <= 14;
+}
 
 const grid = document.getElementById('grid');
 const statsEl = document.getElementById('stats');
@@ -638,12 +841,64 @@ function escapeHtml(s){
   return (s || '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
+/* ---------- Seed data (shown on first load so the app isn't empty) ---------- */
+function seedOrders(){
+  const today = new Date();
+  const seed = [
+    {product:'Sony WH-1000XM5 Headphones', store:'Amazon', price:'₹24,990', category:'Electronics', orderOffset:-10, warrantyOffset:355, returnOffset:5,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/Amazon+order+headphones',
+     notes:'Black colour, order #402-1193822'},
+    {product:'Instant Pot Duo 6L', store:'Flipkart', price:'₹6,499', category:'Home', orderOffset:-25, warrantyOffset:340, returnOffset:-4,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/Flipkart+order+instant+pot',
+     notes:'Return window closed, keeping for warranty only'},
+    {product:'Nike Air Zoom Pegasus 40', store:'Myntra', price:'₹8,995', category:'Clothing', orderOffset:-3, warrantyOffset:88, returnOffset:11,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/Myntra+order+shoes',
+     notes:'Size UK 9, exchange only if size issue'},
+    {product:'Minimalist Sunscreen SPF 50', store:'Nykaa', price:'₹549', category:'Beauty', orderOffset:-1, warrantyOffset:null, returnOffset:6,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/Nykaa+order+sunscreen',
+     notes:'Check for damage before opening the seal'},
+    {product:'Samsung 27" Smart Monitor', store:'Amazon', price:'₹22,499', category:'Electronics', orderOffset:-40, warrantyOffset:1, returnOffset:-30,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/Amazon+order+monitor',
+     notes:'Warranty ending very soon — register with Samsung Care if not done'},
+    {product:'Organic Grocery Combo Pack', store:'BigBasket', price:'₹1,850', category:'Groceries', orderOffset:-1, warrantyOffset:null, returnOffset:1,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/BigBasket+order+grocery',
+     notes:'Perishables — check items on delivery, replace-only window is short'},
+    {product:'Scented Candle Gift Set', store:'Etsy', price:'₹1,299', category:'Other', orderOffset:-8, warrantyOffset:null, returnOffset:7,
+     gmailLink:'https://mail.google.com/mail/u/0/#search/Etsy+order+candle+gift',
+     notes:'Gift for a friend — keep the box in case it needs to be returned'},
+  ];
+  return seed.map(s => ({
+    id: uid(),
+    product: s.product,
+    store: s.store,
+    price: s.price,
+    category: s.category,
+    orderDate: fmtDate(addDays(today, s.orderOffset)),
+    warrantyDate: s.warrantyOffset === null ? '' : fmtDate(addDays(today, s.warrantyOffset)),
+    returnDate: fmtDate(addDays(today, s.returnOffset)),
+    gmailLink: s.gmailLink,
+    notes: s.notes,
+    createdAt: Date.now(),
+    archived: false,
+    imported: false
+  }));
+}
+
 /* ---------- Persistence ---------- */
 async function loadAll(){
   try{
     const res = await window.storage.get(STORAGE_KEY, false);
-    orders = res && res.value ? JSON.parse(res.value) : [];
-  }catch(e){ orders = []; }
+    if(res && res.value){
+      orders = JSON.parse(res.value);
+    }else{
+      // First time opening the app — populate with sample orders
+      orders = seedOrders();
+      await saveOrders();
+    }
+  }catch(e){
+    orders = seedOrders();
+    try{ await saveOrders(); }catch(e2){}
+  }
 
   try{
     const c = await window.storage.get(CONN_KEY, false);
@@ -684,7 +939,7 @@ async function saveTheme(mode){
 /* ---------- Theme ---------- */
 function applyTheme(mode){
   document.body.setAttribute('data-theme', mode);
-  document.getElementById('themeToggle').textContent = mode === 'dark' ? '☀️' : '🌙';
+  document.getElementById('themeToggle').innerHTML = mode === 'dark' ? '☀️ Light mode' : '🌙 Dark mode';
 }
 document.getElementById('themeToggle').addEventListener('click', () => {
   const current = document.body.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
@@ -756,15 +1011,24 @@ function render(){
   const showArchived = showArchivedEl.checked;
 
   let list = orders
-    .filter(o => showArchived ? true : !o.archived)
+    .filter(o => sidebarView === 'archived' ? o.archived : (showArchived ? true : !o.archived))
     .filter(o => !q || (o.product||'').toLowerCase().includes(q) || (o.store||'').toLowerCase().includes(q))
     .filter(o => passesFilter(o, mode))
     .filter(o => cat === 'all' || o.category === cat);
 
+  if(sidebarView === 'ending'){
+    list = list.filter(isEndingSoon);
+  }
+
   list = sortList(list, sortByEl.value);
 
   if(list.length === 0){
-    grid.innerHTML = `<div class="empty"><div class="big">📦</div><p>No orders here yet.</p><p>Tap "+ Add order" to start tracking one.</p></div>`;
+    const emptyMsg = sidebarView === 'archived'
+      ? `<div class="empty"><div class="big">🗄️</div><p>No archived orders.</p><p>Archived orders will show up here.</p></div>`
+      : sidebarView === 'ending'
+      ? `<div class="empty"><div class="big">🎉</div><p>Nothing ending soon.</p><p>You're all caught up.</p></div>`
+      : `<div class="empty"><div class="big">📦</div><p>No orders here yet.</p><p>Tap "+ Add order" to start tracking one.</p></div>`;
+    grid.innerHTML = emptyMsg;
     return;
   }
 
@@ -806,7 +1070,7 @@ function render(){
         </div>
 
         ${o.notes ? `<div class="notes">${escapeHtml(o.notes)}</div>` : ''}
-        ${o.gmailLink ? `<a class="gmail-link" href="${escapeHtml(o.gmailLink)}" target="_blank" rel="noopener">✉️ Open Gmail receipt</a>` : ''}
+        ${o.gmailLink ? `<div class="gmail-link" title="${escapeHtml(o.gmailLink)}">✉️ Gmail receipt saved</div>` : ''}
       </div>
     `;
   }).join('');
@@ -1001,6 +1265,45 @@ document.getElementById('exportCsv').addEventListener('click', () => {
 });
 
 loadAll();
+
+/* ---------- Sidebar navigation ---------- */
+const sidebarViewBtns = document.querySelectorAll('.nav-item[data-nav]');
+sidebarViewBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    sidebarView = btn.getAttribute('data-nav');
+    sidebarViewBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if(sidebarView === 'archived'){ showArchivedEl.checked = true; }
+    closeSidebarOnMobile();
+    render();
+  });
+});
+
+const catNavBtns = document.querySelectorAll('.nav-item[data-cat]');
+catNavBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const cat = btn.getAttribute('data-cat');
+    categoryFilterEl.value = cat;
+    catNavBtns.forEach(b => b.classList.remove('cat-active'));
+    btn.classList.add('cat-active');
+    closeSidebarOnMobile();
+    render();
+  });
+});
+
+/* keep sidebar category highlight in sync if changed from the toolbar dropdown */
+categoryFilterEl.addEventListener('change', () => {
+  catNavBtns.forEach(b => {
+    b.classList.toggle('cat-active', b.getAttribute('data-cat') === categoryFilterEl.value);
+  });
+});
+
+const sidebarEl = document.getElementById('sidebar');
+const hamburgerBtn = document.getElementById('hamburgerBtn');
+hamburgerBtn.addEventListener('click', () => sidebarEl.classList.toggle('open'));
+function closeSidebarOnMobile(){
+  if(window.innerWidth <= 860) sidebarEl.classList.remove('open');
+}
 </script>
 
 </body>
