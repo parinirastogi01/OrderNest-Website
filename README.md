@@ -15,8 +15,7 @@ A colorful web app for tracking your online orders, warranty expiry dates, and r
 - Everything saves automatically — no login required
 
 ## Live site
-
-🔗 [View OrderNest](https://parinirastogi01.github.io/OrderNest-Website/)
+https://parinirastogi01.github.io/OrderNest-Website/
 
 ## Tech used
 
